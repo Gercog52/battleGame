@@ -1,0 +1,22 @@
+{
+  "name": "battleGame",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn webpack",
+    "dev": "webpack-dev-server --open --config ./webpack.dev.js"
+  },
+  "dependencies": {
+    "html-webpack-plugin": "^4.3.0",
+    "webpack": "^4.44.1"
+  },
+  "devDependencies": {
+    "babel-loader": "^8.1.0",
+    "ts-loader": "^8.0.2",
+    "typescript": "^3.9.7",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.0.9"
+  }
+}
