@@ -16,7 +16,12 @@ const size = {
   w: 40,
   h: 40,
 }
-const speed = 1;
+const sizeBol = {
+  w: 20,
+  h: 20,
+}
+
+const speed = 2;
 const setColorTeam = () => {ctx.fillStyle = 'green'}
 setColorTeam();
 ctx.fillRect(cord.x, cord.y, size.w, size.h);
@@ -27,63 +32,48 @@ const viewRect = () => {
   ctx.fillRect(cord.x, cord.y, size.w, size.h);
 }
 
-const moveRight = () => {
-  return setInterval(() => {
-    clearFull();
-    cord.x+=speed;
-    viewRect();
-  }, 1)
+
+const testBol = {
+  x: 0,
+  y: 0,
 }
-const moveLeft = () => {
-  return setInterval(() => {
-    clearFull();
-    cord.x-=speed;
-    viewRect();
-  }, 1)
-}
-const moveTop = () => {
-  return setInterval(() => {
-    clearFull();
-    cord.y-=speed;
-    viewRect();
-  }, 1)
-}
-const moveBottom = () => {
-  return setInterval(() => {
-    clearFull();
-    cord.y+=speed;
-    viewRect();
-  }, 8)
+const viewRectBol = (bol: typeof testBol) => {
+  setColorTeam();
+  ctx.fillRect(bol.x,bol.y,sizeBol.w,sizeBol.h);
 }
 
-// @ts-ignore
-const state = {
-  isTopIntervalIndex: 0   as unknown as NodeJS.Timeout,
-  isDownIntervalIndex: 0  as unknown as NodeJS.Timeout,
-  isLeftIntervalIndex: 0  as unknown as NodeJS.Timeout,
-  isRightIntervalIndex: 0 as unknown as NodeJS.Timeout,
+const indexUpperPosition = {
+  x: 0,
+  y: 0,
 }
+const bools: Array<typeof testBol> = [];
 
 document.addEventListener('keydown', (e) => {
+  if (e.keyCode == 32) {
+    bools.push({
+      x: cord.x,
+      y: cord.y
+    })
+  }
   switch (e.key) {
     case 's': {
-      if (!state.isDownIntervalIndex)
-      state.isDownIntervalIndex = moveBottom();
+      if (!(indexUpperPosition.y == speed))
+        indexUpperPosition.y += speed;
       break;
     }
     case 'w': {
-      if(!state.isTopIntervalIndex)
-      state.isTopIntervalIndex = moveTop();
+      if (!(indexUpperPosition.y == -speed))
+      indexUpperPosition.y-=speed;
       break;
     }
     case 'd': {
-      if(!state.isRightIntervalIndex)
-      state.isRightIntervalIndex = moveRight();
+      if (!(indexUpperPosition.x == speed))
+      indexUpperPosition.x+=speed;
       break;
     }
     case 'a': {
-      if(!state.isLeftIntervalIndex)
-      state.isLeftIntervalIndex = moveLeft();
+      if (!(indexUpperPosition.x == -speed))
+      indexUpperPosition.x-=speed;
       break;
     }
   }
@@ -91,24 +81,31 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('keyup', (e) => {
   switch (e.key) {
     case 's': {
-      clearInterval(state.isDownIntervalIndex);
-      state.isDownIntervalIndex = 0 as any;
+      indexUpperPosition.y = 0;
       break;
     }
     case 'w': {
-      clearInterval(state.isTopIntervalIndex);
-      state.isTopIntervalIndex = 0 as any;
+      indexUpperPosition.y = 0;
       break;
     }
     case 'd': {
-      clearInterval(state.isRightIntervalIndex);
-      state.isRightIntervalIndex = 0 as any;
+      indexUpperPosition.x = 0;
       break;
     }
     case 'a': {
-      clearInterval(state.isLeftIntervalIndex);
-      state.isLeftIntervalIndex = 0 as any;
+      indexUpperPosition.x = 0;
       break;
     }
   }
 })
+function drow () {
+  cord.y+=indexUpperPosition.y;
+  cord.x+=indexUpperPosition.x;
+  viewRect();
+  for (let t=0; t<bools.length; t++) {
+    bools[t].x+=speed;
+    viewRectBol(bools[t]);
+  }
+  window.requestAnimationFrame(drow);
+}
+drow();
