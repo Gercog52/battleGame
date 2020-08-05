@@ -48,12 +48,22 @@ const indexUpperPosition = {
 }
 const bools: Array<typeof testBol> = [];
 
+let isAttact: any = 0;
+
 document.addEventListener('keydown', (e) => {
   if (e.keyCode == 32) {
-    bools.push({
-      x: cord.x,
-      y: cord.y
-    })
+    if (!isAttact) {
+      bools.push({
+        x: cord.x,
+        y: cord.y
+      })
+      isAttact = setInterval(() => {
+        bools.push({
+          x: cord.x,
+          y: cord.y
+        })
+      }, 250)
+    }
   }
   switch (e.key) {
     case 's': {
@@ -79,6 +89,11 @@ document.addEventListener('keydown', (e) => {
   }
 })
 document.addEventListener('keyup', (e) => {
+  if (e.keyCode === 32) {
+    clearInterval(isAttact);
+    isAttact = 0;
+  }
+
   switch (e.key) {
     case 's': {
       indexUpperPosition.y = 0;
@@ -99,6 +114,7 @@ document.addEventListener('keyup', (e) => {
   }
 })
 function drow () {
+
   cord.y+=indexUpperPosition.y;
   cord.x+=indexUpperPosition.x;
   viewRect();
