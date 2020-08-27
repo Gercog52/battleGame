@@ -10,8 +10,11 @@ canvas.height = window.innerHeight;
 
 const cord = {
   x: 10,
-  y: 10
+  y: 10,
+  rotate: 0,
 };
+let addRotate = 0;
+
 const size = {
   w: 40,
   h: 40,
@@ -29,10 +32,9 @@ ctx.fillRect(cord.x, cord.y, size.w, size.h);
 const viewRect = () => {
   clearFull();
   setColorTeam();
+  ctx.rotate(cord.rotate * Math.PI/180);
   ctx.fillRect(cord.x, cord.y, size.w, size.h);
 }
-
-
 const testBol = {
   x: 0,
   y: 0,
@@ -50,6 +52,9 @@ const bools: Array<typeof testBol> = [];
 
 let isAttact: any = 0;
 
+document.addEventListener('mousemove', (e) => {
+  console.log(e);
+})
 document.addEventListener('keydown', (e) => {
   if (e.keyCode == 32) {
     if (!isAttact) {
@@ -93,7 +98,6 @@ document.addEventListener('keyup', (e) => {
     clearInterval(isAttact);
     isAttact = 0;
   }
-
   switch (e.key) {
     case 's': {
       indexUpperPosition.y = 0;
@@ -114,9 +118,9 @@ document.addEventListener('keyup', (e) => {
   }
 })
 function drow () {
-
   cord.y+=indexUpperPosition.y;
   cord.x+=indexUpperPosition.x;
+  cord.rotate+=addRotate;
   viewRect();
   for (let t=0; t<bools.length; t++) {
     bools[t].x+=speed;
